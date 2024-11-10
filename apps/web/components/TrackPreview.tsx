@@ -82,7 +82,7 @@ export function TrackPreview({ showPreview, setShowPreview, track }: TrackPrevie
           <Link href={track.problems.length ? `/tracks/${track.id}/${track.problems[0]?.id}` : ""}>
             <Button
               size={"lg"}
-              className="flex items-center justify-center bg-blue-600 text-white hover:bg-blue-500 transition-all duration-300"
+              className="flex items-center justify-center bg-blue-600 text-white hover:bg-blue-500 transition-all duration-300 w-full mt-4"
               onClick={(e) => e.stopPropagation()}
             >
               Start
