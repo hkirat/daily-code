@@ -14,13 +14,6 @@ import {
   Button,
   Skeleton,
   Separator,
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@repo/ui";
 import { motion } from "framer-motion";
 
@@ -128,7 +121,7 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: "easeInOut", type: "spring", damping: 10, delay: 0.5 }}
-      className="flex max-w-5xl flex-col gap-4 w-full mx-auto p-4"
+      className="flex max-w-5xl flex-col gap-4 w-full mx-auto p-4 mb-8"
       id="tracks"
     >
       <div className="flex w-full gap-4 justify-between items-center flex-col md:flex-row">
@@ -224,42 +217,6 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
           </div>
         </div>
       )}
-      {/* Pagination Controls */}
-      <div className="flex justify-end items-end mt-4 w-full">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem className="cursor-pointer">
-              <PaginationPrevious
-                onClick={() => {
-                  setCurrentPage((prev) => Math.max(prev - 1, 1));
-                }}
-              />
-            </PaginationItem>
-            {Array.from({ length: totalPages }).map((_, index) => (
-              <PaginationItem key={index} className="cursor-pointer">
-                <PaginationLink onClick={() => setCurrentPage(index + 1)}>{index + 1}</PaginationLink>
-              </PaginationItem>
-            ))}
-            {totalPages > 5 && (
-              <>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-              </>
-            )}
-
-            <PaginationItem
-            className="cursor-pointer"
-            >
-              <PaginationNext
-                onClick={() => {
-                  setCurrentPage((prev) => Math.min(prev + 1, totalPages));
-                }}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
     </motion.div>
   );
 };
