@@ -33,7 +33,11 @@ export function ModeToggle() {
     ) : (
       <div className="flex items-center gap-2">
         <Sun className={`h-5 w-5 transition-all duration-300 ${isDarkMode ? "text-primary/50" : "text-blue-600"}`} />
-        <Switch checked={isDarkMode} onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")} />
+        <Switch
+          className="outline outline-1 outline-black"
+          checked={isDarkMode}
+          onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+        />
         <Moon className={`h-5 w-5 transition-all duration-300 ${isDarkMode ? "text-blue-600" : "text-primary/50"}`} />
       </div>
     );
