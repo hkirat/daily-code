@@ -11,7 +11,6 @@
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "prepare": "husky",
     "dev:docker": "npm run prisma:docker && yarn run dev",
     "prisma:docker": "cd packages/db && npx prisma migrate dev --skip-seed && npx prisma db seed"
   },
@@ -22,7 +21,6 @@
     "@repo/typescript-config": "*",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.56.0",
-    "husky": "^9.0.7",
     "lint-staged": "^15.2.1",
     "postcss": "^8.4.33",
     "prettier": "^3.1.1",

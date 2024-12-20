@@ -229,11 +229,13 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
         <Pagination>
           <PaginationContent>
             <PaginationItem className="cursor-pointer">
-              <PaginationPrevious
-                onClick={() => {
-                  setCurrentPage((prev) => Math.max(prev - 1, 1));
-                }}
-              />
+              {
+                currentPage === 1? (<div></div>) : (<PaginationPrevious
+                  onClick={() => {
+                    setCurrentPage((prev) => Math.max(prev - 1, 1));
+                  }}
+                />) 
+              }
             </PaginationItem>
             {Array.from({ length: totalPages }).map((_, index) => (
               <PaginationItem key={index} className="cursor-pointer">
@@ -250,12 +252,14 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
 
             <PaginationItem
             className="cursor-pointer"
-            >
-              <PaginationNext
+            >{
+              currentPage === totalPages ? (<div></div>) : (<PaginationNext
                 onClick={() => {
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages));
                 }}
-              />
+              />) 
+            }
+              
             </PaginationItem>
           </PaginationContent>
         </Pagination>
