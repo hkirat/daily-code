@@ -104,3 +104,13 @@
   -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
   scrollbar-width: none; /* Hide scrollbar for Firefox */
 }
+
+.scrollbar-light {
+  scrollbar-width: auto;
+  scrollbar-color: #7d7d7d #f4f4f5;
+}
+
+.scrollbar-dark {
+  scrollbar-width: thin;
+  scrollbar-color: #71717a #1f2937;
+}
