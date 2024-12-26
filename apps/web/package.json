@@ -10,7 +10,7 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^1.5.2",
+    "@auth/prisma-adapter": "^2.7.4",
     "@google/generative-ai": "^0.11.3",
     "@icons-pack/react-simple-icons": "^9.4.1",
     "@qdrant/js-client-rest": "^1.9.0",
@@ -28,6 +28,7 @@
     "notion-client": "^6.16.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-notion-x": "7.2.5",
     "react-scroll-to-top": "^3.0.0",
     "recoil": "^0.7.7",
     "tailwind-merge": "^2.2.0",
