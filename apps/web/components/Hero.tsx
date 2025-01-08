@@ -115,13 +115,13 @@ export default function Hero({ tracks }: { tracks: TrackPros[] }) {
               gradientUnits="userSpaceOnUse"
               gradientTransform="matrix(12.12436 -7 4.2 7.27461 16 16)"
             >
-              <stop stop-color="#7D7D7D" />
-              <stop offset=".267" stop-color="#7E7C7A" />
-              <stop offset=".45" stop-color="#817871" />
-              <stop offset=".608" stop-color="#867162" />
-              <stop offset=".753" stop-color="#8D684C" />
-              <stop offset=".886" stop-color="#965C30" />
-              <stop offset="1" stop-color="#A04F12" />
+              <stop stopColor="#7D7D7D" />
+              <stop offset=".267" stopColor="#7E7C7A" />
+              <stop offset=".45" stopColor="#817871" />
+              <stop offset=".608" stopColor="#867162" />
+              <stop offset=".753" stopColor="#8D684C" />
+              <stop offset=".886" stopColor="#965C30" />
+              <stop offset="1" stopColor="#A04F12" />
             </radialGradient>
           </defs>
         </motion.svg>
