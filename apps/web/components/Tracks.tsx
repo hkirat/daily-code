@@ -50,7 +50,7 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
   const [filteredTracks, setFilteredTracks] = useState<TrackPros[]>(tracks);
   const [visibleTracks, setVisibleTracks] = useState<TrackPros[]>([]);
   const [sortBy, setSortBy] = useState<string>("new");
-  const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
+  //const [isSelectOpen, setIsSelectOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedCohort, setSelectedCohort] = useState<number | null>(null);
@@ -78,6 +78,8 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
     } else if (sortBy === "old") {
       sortedTracks.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     }
+    //console.log(sortedTracks);
+    
     setFilteredTracks(sortedTracks);
     setLoading(false);
   };
@@ -97,7 +99,10 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
   useEffect(() => {
     setLoading(true);
     const start = (currentPage - 1) * tracksPerPage;
+    //console.log("start", start);
+    
     const end = start + tracksPerPage;
+    //console.log("end", end);
     setVisibleTracks(filteredTracks.slice(start, end));
     setLoading(false);
   }, [currentPage, filteredTracks]);
@@ -197,7 +202,7 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
             ☹️ Sorry - currently there are no tracks available.
           </p>
         ) : (
-          filteredTracks.map((t) => (
+          visibleTracks.map((t) => (
             <motion.li key={t.id} className="w-full" variants={{ hidden: { opacity: 0 }, show: { opacity: 1 } }}>
               <TrackCard2 track={t} />
             </motion.li>
@@ -221,14 +226,14 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
           <PaginationContent>
             <PaginationItem className="cursor-pointer">
               <PaginationPrevious
-                onClick={() => {
+                onClick={() => {                  
                   setCurrentPage((prev) => Math.max(prev - 1, 1));
                 }}
               />
             </PaginationItem>
             {Array.from({ length: totalPages }).map((_, index) => (
               <PaginationItem key={index} className="cursor-pointer">
-                <PaginationLink onClick={() => setCurrentPage(index + 1)}>{index + 1}</PaginationLink>
+                <PaginationLink onClick={() => setCurrentPage(index + 1)} isActive={index + 1 === currentPage}>{index + 1}</PaginationLink>
               </PaginationItem>
             ))}
             {totalPages > 5 && (
