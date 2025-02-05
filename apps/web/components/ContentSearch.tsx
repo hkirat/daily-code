@@ -47,7 +47,7 @@ export function ContentSearch({ tracks }: { tracks: TrackPros[] }) {
   }, []);
   useEffect(() => {
     const fuse = new Fuse(allTracks, {
-      keys: ["payload.problemTitle"],
+      keys: ["payload.problemTitle", "payload.trackTitle"],
     });
 
     async function fetchSearchResults() {
