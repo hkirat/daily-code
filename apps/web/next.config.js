@@ -2,6 +2,7 @@
 
 const path = require('path');
 const webpack = require("webpack");
+const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
   webpack: (config) => {
@@ -24,7 +25,9 @@ module.exports = {
   },
 
   transpilePackages: ["@repo/ui", "@repo/common", "@repo/recoil"],
-  images: {
-    domains: ["d2szwvl7yo497w.cloudfront.net", "appx-wsb-gcp.akamai.net.in"], // Add your domain here
-  },
+   images: isDev
+    ? { unoptimized: true }
+    : {
+        domains: ["d2szwvl7yo497w.cloudfront.net" , "appx-wsb-gcp.akamai.net.in"], //Add your domain here
+      },
 };
