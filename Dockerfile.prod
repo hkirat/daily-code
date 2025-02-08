@@ -1,23 +1,49 @@
-FROM node:20-alpine
-ARG DATABASE_URL
+FROM node:20-alpine AS base
 
+FROM base AS deps
 RUN set -ex; \
     apk update; \
     apk add --no-cache \
+    libc6-compat \
     openssl
 
 WORKDIR /usr/src/app
 
+COPY package.json yarn.lock* ./
+COPY apps/web/package.json ./apps/web/
+COPY packages/ ./packages/
+
+RUN yarn install --ignore-scripts
+
+FROM base AS builder
+WORKDIR /usr/src/app
+
+COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 
-RUN yarn
-RUN cd packages/db && DATABASE_URL=$DATABASE_URL npx prisma@5.12.0 generate && cd ../..
-## put DATABASE_URL in apps/web/.env
-RUN echo DATABASE_URL=$DATABASE_URL >> apps/web/.env
-RUN DATABASE_URL=$DATABASE_URL yarn build
-## Remove .env file
-RUN rm apps/web/.env
+RUN yarn global add turbo@^2.1.1
+RUN DATABASE_URL=$DATABASE_URL npx prisma@5.12.0 generate --schema packages/db/prisma/schema.prisma
+
+RUN cd apps/web && yarn add sharp
+RUN yarn turbo run build --filter=web...
+
+FROM base AS runner
+WORKDIR /usr/src/app
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+RUN mkdir .next && chown nextjs:nodejs .next
+
+USER nextjs
+
+COPY --from=builder --chown=nextjs:nodejs /usr/src/app/apps/web/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /usr/src/app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=builder --chown=nextjs:nodejs /usr/src/app/apps/web/public ./apps/web/public
 
 EXPOSE 3000
+ENV NODE_ENV production
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
 
-CMD ["yarn", "start"]
+CMD ["node", "apps/web/server.js"]

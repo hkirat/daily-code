@@ -18,6 +18,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@repo/db": "*",
     "@repo/ui": "*",
+    "@repo/store": "*",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.6.0",
