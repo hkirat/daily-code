@@ -31,38 +31,42 @@ const TrackTools = ({
           </Button>
         </Link>
         <PageToggle allProblems={track.problems} track={track} />
-        <Link
-          prefetch={true}
-          href={problemIndex !== 0 ? `/tracks/${track.id}/${track.problems[problemIndex - 1]!.id}` : ``}
-          style={{ cursor: problemIndex !== 0 ? "pointer" : "not-allowed" }}
-        >
-          <Button
-            className="flex gap-2 bg-[#323232] font-semibold dark:bg-slate-50"
-            disabled={problemIndex === 0}
-            size={"lg"}
+        <div style={{ cursor: problemIndex !== 0 ? "pointer" : "not-allowed" }}>
+          <Link
+            prefetch={true}
+            href={problemIndex !== 0 ? `/tracks/${track.id}/${track.problems[problemIndex - 1]!.id}` : ``}
+            className={ problemIndex === 0 ? "pointer-events-none" : "" }
           >
-            <ChevronLeft className="size-4" />
-            <span className="hidden md:block">Prev</span>
-          </Button>
-        </Link>
-        <Link
-          prefetch={true}
-          href={
-            problemIndex + 1 === track.problems.length
-              ? ``
-              : `/tracks/${track.id}/${track.problems[problemIndex + 1]!.id}`
-          }
-          style={{ cursor: problemIndex + 1 !== track.problems.length ? "pointer" : "not-allowed" }}
-        >
-          <Button
-            className="flex gap-2 bg-[#323232] font-semibold dark:bg-slate-50"
-            disabled={problemIndex + 1 === track.problems.length}
-            size={"lg"}
+            <Button
+              className="flex gap-2 bg-[#323232] font-semibold dark:bg-slate-50"
+              disabled={problemIndex === 0}
+              size={"lg"}
+            >
+              <ChevronLeft className="size-4" />
+              <span className="hidden md:block">Prev</span>
+            </Button>
+          </Link>
+        </div>
+        <div style={{ cursor: problemIndex + 1 !== track.problems.length ? "pointer" : "not-allowed" }}>
+          <Link
+            prefetch={true}
+            href={
+              problemIndex + 1 === track.problems.length
+                ? ``
+                : `/tracks/${track.id}/${track.problems[problemIndex + 1]!.id}`
+            }
+            className={ problemIndex + 1 === track.problems.length ? "pointer-events-none" : "" }
           >
-            <span className="hidden md:block">Next</span>
-            <ChevronRight className="size-4" />
-          </Button>
-        </Link>
+            <Button
+              className="flex gap-2 bg-[#323232] font-semibold dark:bg-slate-50"
+              disabled={problemIndex + 1 === track.problems.length}
+              size={"lg"}
+            >
+              <span className="hidden md:block">Next</span>
+              <ChevronRight className="size-4" />
+            </Button>
+          </Link>
+        </div>
 
         {/* To Top */}
         <Button className="flex gap-2 dark:bg-[#323232]" onClick={scrollToTop} size={"lg"} variant={"secondary"}>
