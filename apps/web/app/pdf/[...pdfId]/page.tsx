@@ -6,6 +6,7 @@ import { getProblem, getTrack } from "../../../components/utils";
 import { LessonView } from "../../../components/LessonView";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../lib/auth";
+import { NotionRenderer } from "../../../components/NotionRenderer";
 
 const notion = new NotionAPI();
 
@@ -40,15 +41,7 @@ export default async function TrackComponent({ params }: { params: { pdfId: stri
     return (
       <div>
         {trackDetails?.problems.map((problem: any, i: number) => (
-          <LessonView
-            isPdfRequested
-            track={trackDetails}
-            problem={{
-              ...problemDetails,
-              notionRecordMap: notionRecordMaps[i],
-            }}
-            key={i}
-          />
+          <NotionRenderer recordMap={notionRecordMaps[i]} isPDF={true} />
         ))}
         <Print />
       </div>

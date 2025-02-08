@@ -9,7 +9,7 @@ import { isLegacyViewMode } from "@repo/store";
 import CodeBlock from "./CodeBlock";
 
 // Week-4-1-647987d9b1894c54ba5c822978377910
-export const NotionRenderer = ({ recordMap }: { recordMap: any }) => {
+export const NotionRenderer = ({ recordMap, isPDF = false }: { recordMap: any; isPDF?: boolean }) => {
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === "dark";
 
@@ -25,8 +25,8 @@ export const NotionRenderer = ({ recordMap }: { recordMap: any }) => {
 
   return (
     <NotionRendererLib
-      bodyClassName="text-base sm:text-lg"
-      className={isLegacyMode ? "" : "pt-12 dark:!bg-[#0a0a0a]"}
+      bodyClassName={`text-base sm:text-lg ${isPDF && "!pb-0"}`}
+      className={isLegacyMode ? "" : `${isPDF ? "pt-0" : "pt-12"} break-before-page dark:!bg-[#0a0a0a]`}
       components={components}
       darkMode={isDarkMode}
       disableHeader
