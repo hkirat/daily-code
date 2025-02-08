@@ -27,10 +27,9 @@ export function PageToggle({
       <DropdownMenuTrigger asChild>
         <Button
           className={`flex gap-2 font-semibold ${isLegacyMode ? "" : "dark:bg-[#323232]"}`}
-          size={"lg"}
           variant={isLegacyMode ? "outline" : "secondary"}
         >
-          <span className={`hidden ${isAtHeader ? "lg" : "md"}:block`}>Jump To</span>
+          <span className={`hidden ${isAtHeader ? "lg" : "sm"}:block`}>Jump To</span>
           <ArrowUpRight className="size-4" />
         </Button>
       </DropdownMenuTrigger>

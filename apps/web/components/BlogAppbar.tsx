@@ -93,7 +93,7 @@ export const BlogAppbar = ({
           transition={{ duration: 0.3 }}
           className={`${visible ? "translate-y-0" : "-translate-y-full"} px-6`}
         >
-          <Card className="border-primary/10 no-scrollbar max-h-[50vh] w-fit overflow-auto bg-black/10 pt-4 backdrop-blur-lg">
+          <Card className="border-primary/10 no-scrollbar max-h-[50vh] w-fit overflow-auto bg-[#e5e5e5]/95 pt-4 backdrop-blur-lg dark:bg-black/95">
             {track?.problems?.map((problem: { id: string; title: string }, index: number) => {
               const isDisabled = currentTrack === `${track.id}/${problem.id}`;
               return (
@@ -175,7 +175,7 @@ export const BlogAppbar = ({
             {/* menu */}
             <div
               onClick={() => setIsOpen(!isOpen)}
-              className="text-primary border-primary/10 flex cursor-pointer items-center gap-4 rounded-lg border bg-black/10 p-3 backdrop-blur-lg"
+              className="text-primary border-primary/10 flex cursor-pointer items-center gap-4 rounded-lg border bg-[#e5e5e5]/95 dark:bg-black/95 p-3 backdrop-blur-lg"
             >
               {isOpen ? <X className="size-6" /> : <Menu className="size-6" />}
             </div>
@@ -187,7 +187,7 @@ export const BlogAppbar = ({
               className="flex justify-between gap-2"
             >
               <div
-                className={`border-primary/10 flex items-center gap-4 rounded-lg border bg-black/10 p-2 backdrop-blur-lg transition-all duration-500 ease-in-out`}
+                className={`border-primary/10 flex items-center gap-4 rounded-lg border bg-[#e5e5e5]/95 dark:bg-black/95 p-2 backdrop-blur-lg transition-all duration-500 ease-in-out`}
               >
                 <Link href={"/"} className="hidden cursor-pointer items-center gap-4 md:flex">
                   <Image
@@ -217,7 +217,7 @@ export const BlogAppbar = ({
             className="flex gap-2"
           >
             <div
-              className={`border-primary/10 flex items-center gap-2 rounded-lg border bg-black/10 p-2 backdrop-blur-lg transition-all duration-500 ease-in-out ${
+              className={`border-primary/10 flex items-center gap-2 rounded-lg border bg-[#e5e5e5]/95 p-2 backdrop-blur-lg transition-all duration-500 ease-in-out dark:bg-black/95 ${
                 isOpen ? `translate-y-0 opacity-100` : `-translate-y-32 opacity-0`
               }`}
             >
