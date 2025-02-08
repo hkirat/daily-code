@@ -61,7 +61,7 @@ export default function UserAccountDropDown() {
         {isOpen && (
           <DropdownMenuContent
             forceMount
-            className="bg-secondary/15 border-primary/10 rounded-2xl border p-2 shadow-lg shadow-neutral-600/5 backdrop-blur-lg"
+            className="w-fit bg-secondary/15 border-primary/10 rounded-2xl border p-2 shadow-lg shadow-neutral-600/5 backdrop-blur-lg overflow-x-hidden mt-[10px]"
             align="end"
           >
             <motion.div
