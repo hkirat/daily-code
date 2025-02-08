@@ -266,7 +266,6 @@ export const BlogAppbar = ({
 
   useEffect(() => {
     const savedView = localStorage.getItem("viewMode");
-    console.log({ savedView, check: savedView === "legacy" });
     setIsLegacyMode(savedView === "legacy");
   }, []);
 
