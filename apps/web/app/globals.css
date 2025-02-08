@@ -104,3 +104,17 @@
   -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
   scrollbar-width: none; /* Hide scrollbar for Firefox */
 }
+
+
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background-color: rgba(31, 41, 55, .8);
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(93, 92, 93, .8);
+    border-radius: 4px;
+}

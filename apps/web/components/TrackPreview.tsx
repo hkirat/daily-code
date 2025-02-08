@@ -40,9 +40,11 @@ export function TrackPreview({ showPreview, setShowPreview, track }: TrackPrevie
 
   return (
     <Dialog open={showPreview} onOpenChange={() => setShowPreview(false)}>
-      <DialogContent className="flex items-center gap-4">
+      <DialogContent className="flex items-center gap-4 max-h-[90vh] overflow-y-auto scrollbar sm:no-scrollbar">
         <div className="flex flex-col gap-4 w-full">
-          <img src={track.image} className="h-[25vh] w-full object-cover rounded-lg" />
+          <div className="md:pt-[15vh]">
+            <img src={track.image} className="h-[25vh] w-full object-cover rounded-lg" />
+          </div>
           <div className="flex flex-col gap-4 bg-primary/5 rounded-lg p-4">
             <div className="flex flex-col gap-4">
               <h3 className="text-xl md:text-2xl font-semibold w-full tracking-tight">{track.title}</h3>
@@ -68,7 +70,7 @@ export function TrackPreview({ showPreview, setShowPreview, track }: TrackPrevie
                 {formatDistanceToNow(new Date(track.createdAt), { addSuffix: true })}
               </p>
             </div>
-            <div className="max-h-[25vh] overflow-y-auto flex flex-col gap-3 w-full py-2">
+            <div className="max-h-[25vh] overflow-y-auto flex flex-col gap-3 w-full py-2 scrollbar">
               {track.problems.map((topic: any, idx: number) => (
                 <Link key={topic.id} href={`/tracks/${track.id}/${track.problems[idx]?.id}`}>
                   <div className="cursor-pointer hover:-translate-y-1 flex items-center justify-between bg-primary/5 rounded-lg px-4 py-3 hover:bg-primary/10 transition-all duration-300 scroll-smooth w-full">
