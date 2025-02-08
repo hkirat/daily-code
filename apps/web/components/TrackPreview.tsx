@@ -1,5 +1,4 @@
-"use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { Button } from "../../../packages/ui/src/shad/ui/button";
 import { Dialog, DialogContent } from "../../../packages/ui/src/shad/ui/dailog";
@@ -12,38 +11,13 @@ type TrackPreviewProps = {
   track: any;
 };
 
-const truncateDescription = (text: string, wordLimit: number) => {
-  const words = text.split(" ");
-  if (words.length > wordLimit) {
-    return words.slice(0, wordLimit).join(" ") + " ...";
-  }
-  return text;
-};
-
 export function TrackPreview({ showPreview, setShowPreview, track }: TrackPreviewProps) {
-  const [isMediumOrLarger, setIsMediumOrLarger] = useState(false);
-
-  const updateScreenSize = () => {
-    setIsMediumOrLarger(window.innerWidth >= 768);
-  };
-
-  useEffect(() => {
-    updateScreenSize(); // Set the initial state
-    window.addEventListener("resize", updateScreenSize); // Add resize listener
-
-    return () => {
-      window.removeEventListener("resize", updateScreenSize); // Cleanup listener on unmount
-    };
-  }, []);
-
-  const truncatedDescription = isMediumOrLarger ? track.description : truncateDescription(track.description, 15);
-
   return (
     <Dialog open={showPreview} onOpenChange={() => setShowPreview(false)}>
       <DialogContent className="flex items-center gap-4">
         <div className="flex flex-col gap-4 w-full">
           <img src={track.image} className="h-[25vh] w-full object-cover rounded-lg" />
-          <div className="flex flex-col gap-4 bg-primary/5 rounded-lg p-4">
+          <div className="flex flex-col gap-4 bg-primary/5 rounded-lg p-4 h-32 md:h-36 overflow-y-auto scrollbar-light dark:scrollbar-dark scroll-smooth">
             <div className="flex flex-col gap-4">
               <h3 className="text-xl md:text-2xl font-semibold w-full tracking-tight">{track.title}</h3>
               <div className="flex items-center gap-4">
@@ -57,7 +31,7 @@ export function TrackPreview({ showPreview, setShowPreview, track }: TrackPrevie
                 ))}
               </div>
             </div>
-            <p className="md:text-lg tracking-tighter line-clamp-3 text-primary/60">{truncatedDescription}</p>
+            <p className="md:text-lg tracking-tighter text-primary/60">{track.description}</p>
           </div>
           <div className="flex flex-col gap-4 w-full">
             <div className="flex gap-2 items-center">
