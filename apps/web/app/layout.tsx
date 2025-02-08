@@ -1,7 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import { cn } from "@repo/ui/utils";
 import { Providers, ThemeProvider } from "../components/Providers";
 import NextTopLoader from "nextjs-toploader";
 
