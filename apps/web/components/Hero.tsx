@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 import { ContentSearch } from "../components/ContentSearch";
 import { motion } from "framer-motion";
-import { Spotlight } from "@repo/ui";
 import { TrackPros } from "./Tracks";
 
 export default function Hero({ tracks }: { tracks: TrackPros[] }) {
@@ -168,7 +167,6 @@ export default function Hero({ tracks }: { tracks: TrackPros[] }) {
         </p>
         <ContentSearch tracks={tracks} />
       </motion.div>
-      <Spotlight className="-top-40 left-0 md:left-60 md:-top-20 -z-10" fill="blue" />
     </div>
   );
 }
