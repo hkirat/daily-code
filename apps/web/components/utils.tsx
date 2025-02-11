@@ -2,6 +2,7 @@
 import { MCQQuestion, Prisma, Problem, Track, TrackProblems } from "@prisma/client";
 import db from "@repo/db/client";
 import { cache } from "../../../packages/db/Cache";
+import { revalidateTag, unstable_cache } from "next/cache";
 
 interface Tracks extends Track {
   problems: { problem: Problem }[];
@@ -155,52 +156,43 @@ export async function getTrack(trackId: string) {
     return null;
   }
 }
-
 export async function getAllTracks() {
-  const value = await cache.get("getAllTracks", []);
-  if (value) {
-    const data: AllTracks[] = value.map((track: Tracks) => ({
-      ...track,
-      problems: track.problems.map((problem: { problem: Problem }) => ({ ...problem.problem })),
-    }));
-    return data;
-  }
   try {
-    const tracks = await db.track.findMany({
-      where: {
-        hidden: false,
-      },
-      include: {
-        problems: {
-          select: {
-            problemId: true,
-            problem: true,
+    const getCachedTracks = unstable_cache(
+      async () => {
+        return await db.track.findMany({
+          where: { hidden: false },
+          include: {
+            problems: { select: { problemId: true, problem: true }, orderBy: [{ sortingOrder: "desc" }] },
+            categories: { select: { category: true } },
           },
-          orderBy: [
-            {
-              sortingOrder: "desc",
-            },
-          ],
-        },
-        categories: {
-          select: {
-            category: true,
-          },
-        },
+          orderBy: { createdAt: "asc" },
+        });
       },
-      orderBy: {
-        createdAt: "asc",
-      },
-    });
-    await cache.set("getAllTracks", [], tracks);
-    return tracks.map((track: any) => ({
+      ["tracks"],
+      { revalidate: 3600, tags: ["tracks"] }
+    );
+
+    const tracks = await getCachedTracks();
+
+    if (!Array.isArray(tracks)) {
+      // console.error("Error: getAllTracks did not return an array!", tracks);
+      return [];
+    }
+
+    return tracks.map((track) => ({
       ...track,
-      problems: track.problems.map((problem: any) => ({ ...problem.problem })),
+      problems: track.problems.map((problem) => ({ ...problem.problem })),
     }));
   } catch (e) {
-    console.error(e);
+    console.error("Error fetching tracks:", e);
     return [];
   }
+}
+
+export async function revalidateTracks() {
+  revalidateTag("tracks");
+  revalidateTag("categories");
 }
 
 export async function createTrack(data: {
@@ -251,6 +243,9 @@ export async function createTrack(data: {
         });
       });
     }
+
+    await revalidateTracks();
+
     return track;
   } catch (e) {
     return new Error("Failed to create track");
@@ -315,21 +310,28 @@ export async function updateTrack(
 }
 
 export async function getAllCategories() {
-  const value = await cache.get("getAllCategories", []);
-  if (value) {
-    return value;
-  }
   try {
-    const categories = await db.categories.findMany({
-      select: {
-        id: true,
-        category: true,
+    const getCachedCategories = unstable_cache(
+      async () => {
+        return await db.categories.findMany({
+          select: {
+            id: true,
+            category: true,
+          },
+          distinct: ["category"],
+        });
       },
-      distinct: ["category"],
-    });
+      ["categories"],
+      { tags: ["categories"] }
+    );
+
+    const categories = await getCachedCategories();
+
     await cache.set("getAllCategories", [], categories);
+
     return categories;
   } catch (e) {
+    console.error("Error fetching categories:", e);
     return [];
   }
 }
