@@ -2,6 +2,7 @@
 import { MCQQuestion, Prisma, Problem, Track, TrackProblems } from "@prisma/client";
 import db from "@repo/db/client";
 import { cache } from "../../../packages/db/Cache";
+import { revalidateTag, unstable_cache as nextCache } from "next/cache";
 
 interface Tracks extends Track {
   problems: { problem: Problem }[];
@@ -156,52 +157,48 @@ export async function getTrack(trackId: string) {
   }
 }
 
-export async function getAllTracks() {
-  const value = await cache.get("getAllTracks", []);
-  if (value) {
-    const data: AllTracks[] = value.map((track: Tracks) => ({
-      ...track,
-      problems: track.problems.map((problem: { problem: Problem }) => ({ ...problem.problem })),
-    }));
-    return data;
-  }
-  try {
-    const tracks = await db.track.findMany({
-      where: {
-        hidden: false,
-      },
-      include: {
-        problems: {
-          select: {
-            problemId: true,
-            problem: true,
-          },
-          orderBy: [
-            {
-              sortingOrder: "desc",
+export const getAllTracks = nextCache(
+  async () => {
+    try {
+      const tracks = await db.track.findMany({
+        where: {
+          hidden: false,
+        },
+        include: {
+          problems: {
+            select: {
+              problemId: true,
+              problem: true,
             },
-          ],
-        },
-        categories: {
-          select: {
-            category: true,
+            orderBy: [
+              {
+                sortingOrder: "desc",
+              },
+            ],
+          },
+          categories: {
+            select: {
+              category: true,
+            },
           },
         },
-      },
-      orderBy: {
-        createdAt: "asc",
-      },
-    });
-    await cache.set("getAllTracks", [], tracks);
-    return tracks.map((track: any) => ({
-      ...track,
-      problems: track.problems.map((problem: any) => ({ ...problem.problem })),
-    }));
-  } catch (e) {
-    console.error(e);
-    return [];
-  }
-}
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
+      await cache.set("getAllTracks", [], tracks);
+      return tracks.map((track: any) => ({
+        ...track,
+        problems: track.problems.map((problem: any) => ({ ...problem.problem })),
+      }));
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
+  },
+  ["tracks"],
+  { tags: ["tracks"] }
+);
 
 export async function createTrack(data: {
   id: string;
@@ -251,6 +248,8 @@ export async function createTrack(data: {
         });
       });
     }
+    revalidateTag("tracks");
+    revalidateTag("categories");
     return track;
   } catch (e) {
     return new Error("Failed to create track");
@@ -314,25 +313,25 @@ export async function updateTrack(
   }
 }
 
-export async function getAllCategories() {
-  const value = await cache.get("getAllCategories", []);
-  if (value) {
-    return value;
-  }
-  try {
-    const categories = await db.categories.findMany({
-      select: {
-        id: true,
-        category: true,
-      },
-      distinct: ["category"],
-    });
-    await cache.set("getAllCategories", [], categories);
-    return categories;
-  } catch (e) {
-    return [];
-  }
-}
+export const getAllCategories = nextCache(
+  async () => {
+    try {
+      const categories = await db.categories.findMany({
+        select: {
+          id: true,
+          category: true,
+        },
+        distinct: ["category"],
+      });
+      await cache.set("getAllCategories", [], categories);
+      return categories;
+    } catch (e) {
+      return [];
+    }
+  },
+  ["categories"],
+  { tags: ["categories"] }
+);
 
 export async function getAllMCQs() {
   const value = await cache.get("getAllMCQs", []);
