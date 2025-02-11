@@ -226,18 +226,21 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
                 }}
               />
             </PaginationItem>
-            {Array.from({ length: totalPages }).map((_, index) => (
-              <PaginationItem key={index} className="cursor-pointer">
-                <PaginationLink onClick={() => setCurrentPage(index + 1)}>{index + 1}</PaginationLink>
-              </PaginationItem>
-            ))}
-            {totalPages > 5 && (
-              <>
-                <PaginationItem>
-                  <PaginationEllipsis />
+            {Array.from({ length: totalPages }).map((_, index) =>
+              index < 6 ? (
+                <PaginationItem key={index} className="cursor-pointer">
+                  <PaginationLink onClick={() => setCurrentPage(index + 1)}>
+                    {index + 1}
+                  </PaginationLink>
                 </PaginationItem>
-              </>
+              ) : null
             )}
+            {totalPages > 5 && (
+              <PaginationItem>
+                <PaginationEllipsis />
+              </PaginationItem>
+            )}
+
 
             <PaginationItem
             className="cursor-pointer"
