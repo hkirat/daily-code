@@ -5,8 +5,8 @@ services:
     image: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
-      POSTGRES_DB: 100xdevs
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mypwd}
+      POSTGRES_DB: postgres
       PGDATA: /data/postgres
     ports:
       - "5432:5432"

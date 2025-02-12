@@ -142,11 +142,11 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
             Cohort 3.0
           </Button>
         </div>
-        <div className="flex gap-2 p-2.5 bg-primary/5 rounded-lg w-full md:w-fit">
+        <div className="flex gap-2 p-2.5 bg-primary/5 rounded-lg w-full lg:w-fit">
           {/* Filter by Categories */}
-          <div className="flex gap-2 items-center ">
+          <div className="flex gap-2 items-center w-1/2 lg:w-auto">
             <Select onValueChange={(e) => setSelectedCategory(e === "All" ? "" : e)}>
-              <SelectTrigger className="w-[250px]">
+              <SelectTrigger className="w-full lg:w-[250px]">
                 <SelectValue placeholder={selectedCategory || "All"} />
               </SelectTrigger>
               <SelectContent>
@@ -162,7 +162,7 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
 
           {/* Sort */}
           <Select onValueChange={(e) => setSortBy(e)}>
-            <SelectTrigger className="w-[250px]">
+            <SelectTrigger className="w-1/2 lg:w-[250px]">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
