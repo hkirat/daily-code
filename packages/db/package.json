@@ -14,10 +14,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "5.12.0",
-    "prisma": "^5.12.0"
+    "@prisma/client": "5.12.0"
   },
   "exports": {
     "./client": "./src/index.ts"
+  },
+  "devDependencies": {
+    "prisma": "^6.3.1"
   }
 }

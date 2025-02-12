@@ -1,16 +1,15 @@
 /** @type {import('next').NextConfig} */
 
-const path = require('path');
+const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
   webpack: (config) => {
-
-      // Add path aliases
+    // Add path aliases
     config.resolve.alias = {
-      ...config.resolve.alias,  // preserve existing aliases
-      '@components': path.join(__dirname, 'components'),
-      '@styles': path.join(__dirname, 'styles'),
+      ...config.resolve.alias, // preserve existing aliases
+      "@components": path.join(__dirname, "components"),
+      "@styles": path.join(__dirname, "styles"),
       // Add more aliases as needed
     };
 

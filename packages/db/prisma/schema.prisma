@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -19,16 +13,15 @@ model Account {
   type                     String
   provider                 String
   providerAccountId        String
-  refresh_token            String? @db.Text
+  refresh_token            String?
   refresh_token_expires_in Int?
-  access_token             String? @db.Text
+  access_token             String?
   expires_at               Int?
   token_type               String?
   scope                    String?
-  id_token                 String? @db.Text
+  id_token                 String?
   session_state            String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -42,15 +35,15 @@ model Session {
 }
 
 model User {
-  id            String       @id @default(cuid())
-  name          String?
-  email         String?      @unique
+  id            String      @id @default(cuid())
+  email         String?     @unique
   emailVerified DateTime?
   image         String?
-  admin         Boolean      @default(false)
+  name          String?
+  admin         Boolean     @default(false)
   accounts      Account[]
-  sessions      Session[]
   quizScores    QuizScore[]
+  sessions      Session[]
 }
 
 model VerificationToken {
@@ -66,14 +59,14 @@ model Track {
   title       String
   description String
   image       String
-  categories  TrackCategory[] // This replaces 'category Categories[]'
-  problems    TrackProblems[]
+  hidden      Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  inSearch    Boolean         @default(false)
+  cohort      Int             @default(0)
   canvaLink   String?
-  trackType   TrackType      @default(NOTION)
-  inSearch    Boolean        @default(false)
-  hidden      Boolean        @default(false)
-  cohort      Int            @default(0)
-  createdAt   DateTime       @default(now())
+  trackType   TrackType       @default(NOTION)
+  categories  TrackCategory[]
+  problems    TrackProblems[]
 }
 
 model Categories {
@@ -84,38 +77,32 @@ model Categories {
 
 model TrackCategory {
   trackId    String
-  track      Track      @relation(fields: [trackId], references: [id])
   categoryId String
   category   Categories @relation(fields: [categoryId], references: [id])
+  track      Track      @relation(fields: [trackId], references: [id])
 
-  @@id([trackId, categoryId]) // Composite primary key
+  @@id([trackId, categoryId])
 }
 
 model Problem {
-  id               String            @id @default(uuid())
-  title            String
-  description      String
-  notionDocId      String
-  mcqQuestions     MCQQuestion[]
-  type             ProblemType
-  trackProblems    TrackProblems[]
-  quizScores       QuizScore[]
+  id            String          @id @default(uuid())
+  title         String
+  description   String
+  notionDocId   String
+  type          ProblemType
+  mcqQuestions  MCQQuestion[]
+  quizScores    QuizScore[]
+  trackProblems TrackProblems[]
 }
+
 model TrackProblems {
-  track   Track  @relation(fields: [trackId], references: [id])
-  trackId String
-
-  problem   Problem @relation(fields: [problemId], references: [id])
-  problemId String
-
+  trackId      String
+  problemId    String
   sortingOrder Int
+  problem      Problem @relation(fields: [problemId], references: [id])
+  track        Track   @relation(fields: [trackId], references: [id])
 
   @@id([trackId, problemId])
-}
-
-enum ProblemType {
-  Blog
-  MCQ
 }
 
 model MCQQuestion {
@@ -123,18 +110,23 @@ model MCQQuestion {
   question      String
   options       String[]
   correctOption String
-  problem       Problem  @relation(fields: [problemId], references: [id])
   problemId     String
+  problem       Problem  @relation(fields: [problemId], references: [id])
 }
 
 model QuizScore {
-  id            String   @id @default(uuid())
-  score         Int
-  user          User?    @relation(fields: [userId], references: [id])
-  userId        String?
-  problem       Problem  @relation(fields: [problemId], references: [id])
-  problemId     String
-  createdAt     DateTime @default(now())
+  id        String   @id @default(uuid())
+  score     Int
+  userId    String?
+  problemId String
+  createdAt DateTime @default(now())
+  problem   Problem  @relation(fields: [problemId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
+enum ProblemType {
+  Blog
+  MCQ
 }
 
 enum TrackType {
