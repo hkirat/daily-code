@@ -4,6 +4,7 @@ import { authOptions } from "../../lib/auth";
 import { redirect } from "next/navigation";
 import { UserRound } from "lucide-react";
 import UserDetailForm from "../../components/UserDetailForm";
+import { getUserDetail } from "../../components/utils";
 
 export default async function Profile() {
   const session = await getServerSession(authOptions);
@@ -11,6 +12,17 @@ export default async function Profile() {
   if (!session || !session?.user) {
     redirect("/auth");
   }
+
+  const user = await getUserDetail(session?.user?.id)
+
+  if (!user) {
+    return (
+      <div>
+        <p>User not found. Please contact support or try again later.</p>
+      </div>
+    )
+  }
+
   return (
     <div>
       <header className="border-b-2 p-3">
@@ -24,7 +36,7 @@ export default async function Profile() {
       </header>
 
       <main className="p-3">
-        <UserDetailForm user={session?.user} />
+        <UserDetailForm user={user} />
       </main>
     </div>
   );

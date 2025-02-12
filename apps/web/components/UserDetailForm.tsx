@@ -2,6 +2,7 @@ import { Input, Label } from "@repo/ui";
 import React from "react";
 import UserImage from "./UserImage";
 import { User } from "@prisma/client";
+import { EditUserName } from "./EditUserName";
 
 export default function UserDetailForm({ user }: { user: User }) {
   return (
@@ -12,11 +13,7 @@ export default function UserDetailForm({ user }: { user: User }) {
           <UserImage image={user?.image} key={user?.image} />
         </div>
       </div>
-
-      <div>
-        <Label className="">Your name</Label>
-        <Input disabled placeholder="Enter your name" value={user?.name ? user?.name : ""} className="p-2 mt-2" />
-      </div>
+      <EditUserName userName={user?.name ? user?.name : ""} userId={user?.id} />
       <div>
         <Label className="">Your Email</Label>
         <Input disabled placeholder="Enter your name" value={user?.email ? user?.email : ""} className="p-2 mt-2" />
