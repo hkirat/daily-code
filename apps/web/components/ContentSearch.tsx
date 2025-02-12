@@ -145,6 +145,11 @@ export function ContentSearch({ tracks }: { tracks: TrackPros[] }) {
           </DialogClose>
         </div>
         <div className="h-[500px] py-4 space-y-4 overflow-y-scroll" ref={scrollableContainerRef}>
+        {input.length === 0 ? (
+          <div className="text-center pt-6">Search tracks</div>
+          ) : searchTracks.length === 0 ? (
+          <div className="text-center pt-6">No Result found</div>
+        ) : null}
           {searchTracks.length > 0 &&
             searchTracks.map((track, index) => (
               <div key={track.payload.problemId} className={`p-2 ${index === selectedIndex ? "bg-blue-600/20" : ""}`}>
