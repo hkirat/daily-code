@@ -206,7 +206,7 @@ export const Tracks = ({ tracks, categories }: TracksWithCategoriesProps) => {
       </motion.ul>
 
       {/* Skeleton */}
-      {filteredTracks.length < tracksPerPage && (
+      {filteredTracks.length < tracksPerPage && loading && (
         <div className="flex items-center space-x-4 w-full h-24 bg-neutral-100 dark:bg-neutral-900 p-4 rounded-xl">
           <Skeleton className="h-12 w-12 rounded-2xl" />
           <div className="space-y-2">
