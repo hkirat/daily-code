@@ -7,6 +7,7 @@ import { Dialog, DialogClose, DialogContent, Input, Card, CardDescription, CardH
 import Image from "next/image"; */
 import Fuse from "fuse.js";
 import { TrackPros } from "./Tracks";
+import { div } from "framer-motion/client";
 
 type Payload = {
   problemId: string;
@@ -21,6 +22,7 @@ interface DataItem {
 }
 
 export function ContentSearch({ tracks }: { tracks: TrackPros[] }) {
+  const [startedSearching, setStartedSearching] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [input, setInput] = useState("");
   const [searchTracks, setSearchTracks] = useState<any[]>([]);
@@ -28,6 +30,7 @@ export function ContentSearch({ tracks }: { tracks: TrackPros[] }) {
   const scrollableContainerRef = useRef<HTMLDivElement>(null);
   const deferredInput = useDeferredValue(input);
   const [allTracks, setAllTracks] = useState<DataItem[]>([]);
+  const [suggestedTracks, setSuggestedTracks] = useState<DataItem[]>([]);
   useEffect(() => {
     const updatedTracks: DataItem[] = [];
     tracks.map((t) => {
@@ -43,6 +46,7 @@ export function ContentSearch({ tracks }: { tracks: TrackPros[] }) {
         });
       });
     });
+    const suggestions: DataItem[] = [];
     setAllTracks(updatedTracks);
   }, []);
   useEffect(() => {
@@ -115,27 +119,27 @@ export function ContentSearch({ tracks }: { tracks: TrackPros[] }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={handleClose}>
       <div
-        className="md:max-w-screen border border-primary/15 p-3 rounded-lg cursor-text w-full mx-auto"
+        className="md:max-w-screen border-primary/15 mx-auto w-full cursor-text rounded-lg border p-3"
         onClick={() => setDialogOpen(true)}
       >
-        <div className="md:flex gap-2 items-center hidden justify-between ">
-          <div className="flex gap-2 items-center">
+        <div className="hidden items-center justify-between gap-2 md:flex">
+          <div className="flex items-center gap-2">
             <MagnifyingGlassIcon className="size-4" />
             Search
           </div>
-          <kbd className="bg-white/15 p-2 rounded-sm text-sm leading-3">Ctrl + K</kbd>
+          <kbd className="rounded-sm bg-white/15 p-2 text-sm leading-3">Ctrl + K</kbd>
         </div>
         <div className="block md:hidden">
           <MagnifyingGlassIcon className="size-4" />
         </div>
       </div>
-      <DialogContent className="p-0 gap-0 max-w-2xl">
-        <div className="flex items-center px-6 py-4 border-b">
+      <DialogContent className="max-w-2xl gap-0 p-0">
+        <div className="flex items-center border-b px-6 py-4">
           <MagnifyingGlassIcon className="size-4" />
           <Input
             type="text"
             placeholder="Search"
-            className="border-none focus-visible:outline-none focus-visible:ring-0 text-base shadow-none"
+            className="border-none text-base shadow-none focus-visible:outline-none focus-visible:ring-0"
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
@@ -144,37 +148,76 @@ export function ContentSearch({ tracks }: { tracks: TrackPros[] }) {
             <span className="sr-only">Close</span>
           </DialogClose>
         </div>
-        <div className="h-[500px] py-4 space-y-4 overflow-y-scroll" ref={scrollableContainerRef}>
-          {searchTracks.length > 0 &&
-            searchTracks.map((track, index) => (
-              <div key={track.payload.problemId} className={`p-2 ${index === selectedIndex ? "bg-blue-600/20" : ""}`}>
-                <Link
-                  className="flex"
-                  href={`/tracks/${track.payload.trackId}/${track.payload.problemId}`}
-                  target="_blank"
-                  passHref
-                >
-                  <Card className="p-2 w-full mx-2">
-                    <div className="flex items-center gap-4 py-1 sm:py-2">
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0 overflow-hidden rounded-xl">
-                        <img
-                          alt={track.payload.problemTitle}
-                          src={track.payload.image}
-                          className="w-full h-full object-cover"
-                        />
+
+        {searchTracks.length === 0 ? (
+          <div className="max-h-[500px] space-y-4 overflow-y-scroll py-4" ref={scrollableContainerRef}>
+            <p className="pl-4"> Suggestions : </p>
+            {allTracks.map((track, index) => {
+              return (
+                <div key={track.payload.problemId} className={`p-2 ${index === selectedIndex ? "bg-blue-600/20" : ""}`}>
+                  <Link
+                    className="flex"
+                    href={`/tracks/${track.payload.trackId}/${track.payload.problemId}`}
+                    target="_blank"
+                    passHref
+                  >
+                    <Card className="mx-2 w-full p-2">
+                      <div className="flex items-center gap-4 py-1 sm:py-2">
+                        <div className="min-w-0 flex-1">
+                          <CardHeader className="p-0">
+                            <CardTitle className="text-base sm:text-lg md:text-xl">
+                              {track.payload.problemTitle}
+                            </CardTitle>
+                            <CardDescription className="truncate text-sm">
+                              {" "}
+                              Track : {track.payload.trackTitle}
+                            </CardDescription>
+                          </CardHeader>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <CardHeader className="p-0">
-                          <CardTitle className="text-base sm:text-lg md:text-xl">{track.payload.problemTitle}</CardTitle>
-                          <CardDescription className="text-sm truncate">Track: {track.payload.trackTitle}</CardDescription>
-                        </CardHeader>
+                    </Card>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="h-[500px] space-y-4 overflow-y-scroll py-4" ref={scrollableContainerRef}>
+            {searchTracks.length > 0 &&
+              searchTracks.map((track, index) => (
+                <div key={track.payload.problemId} className={`p-2 ${index === selectedIndex ? "bg-blue-600/20" : ""}`}>
+                  <Link
+                    className="flex"
+                    href={`/tracks/${track.payload.trackId}/${track.payload.problemId}`}
+                    target="_blank"
+                    passHref
+                  >
+                    <Card className="mx-2 w-full p-2">
+                      <div className="flex items-center gap-4 py-1 sm:py-2">
+                        <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl sm:h-20 sm:w-20">
+                          <img
+                            alt={track.payload.problemTitle}
+                            src={track.payload.image}
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <CardHeader className="p-0">
+                            <CardTitle className="text-base sm:text-lg md:text-xl">
+                              {track.payload.problemTitle}
+                            </CardTitle>
+                            <CardDescription className="truncate text-sm">
+                              Track: {track.payload.trackTitle}
+                            </CardDescription>
+                          </CardHeader>
+                        </div>
                       </div>
-                    </div>
-                  </Card>
-                </Link>
-              </div>
-            ))}
-        </div>
+                    </Card>
+                  </Link>
+                </div>
+              ))}
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
